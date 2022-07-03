@@ -1,0 +1,84 @@
+package com.ntt.dao;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.ntt.dbfw.ResultMapper;
+import com.ntt.domain.Admin;
+import com.ntt.domain.AlbumCategory;
+import com.ntt.domain.AlbumDetails;
+import com.ntt.domain.Customer;
+import com.ntt.domain.User;
+
+public class SQLMapper {
+	
+	public static final String FETCHCUST=
+			"select * from USER where CUSTOMERID=? and PASSWORD=?";
+	public static final String INSERTCUST=
+		"insert into USER values(?,?,?,?,?,?,?,?,?,?)";
+	public static final String FETCHALBUM=
+			"select * from ALBUMDETAILS";
+	public static final String FETCHAVAILALBUM=
+			"select * from ALBUMDETAILS where STATUS='Available'";
+	public static final String INSERTALBUM=
+			"insert into ALBUMDETAILS values(?,?,?,?,?,?)";
+	public static final String FETCHALBUMC=
+			"select * from ALBUMCATEGORY";
+	
+	public static final ResultMapper CUSTMAPPER=
+			new ResultMapper()
+		{
+			public Object mapRow(ResultSet rs) throws SQLException {
+			 int  customerId=rs.getInt(1);
+			 String password=rs.getString(2);
+			 String firstName=rs.getString(3);
+			 String secondName=rs.getString(4);
+			 int dob=rs.getInt(5);
+			 String address=rs.getString(6);
+			 long contacttNo=rs.getLong(7);
+			 long creditCardNo=rs.getLong(8);
+			String creditCardType=rs.getString(9);
+			int creditCardExpDate=rs.getInt(10);
+			User u=new User(customerId,password,firstName,secondName,dob,address,contacttNo,creditCardNo,creditCardType,creditCardExpDate);
+				return u;
+			}//mapRow
+			
+		};
+	public static final ResultMapper ALBUMMAPPER=
+			new ResultMapper()
+		{
+			public Object mapRow(ResultSet rs) throws SQLException {
+			int albumId=	rs.getInt(1);
+			int categoryId=rs.getInt(2);
+			String albumTitle=rs.getString(3);
+			int hirePrice=rs.getInt(4);
+		    int noofCD=rs.getInt(5);
+		    String status=rs.getString(6);
+			AlbumDetails al=new AlbumDetails(albumId,categoryId,albumTitle,hirePrice,noofCD,status);
+				return al;
+			}//mapRow
+			
+		};//Anonymous class
+		public static final ResultMapper ALBUMCMAPPER=
+				new ResultMapper()
+			{
+				public Object mapRow(ResultSet rs) throws SQLException {
+		
+				int categoryId=rs.getInt(1);
+				String categoryName=rs.getString(2);
+				String categoryDesc=rs.getString(3);
+				AlbumCategory ac=new AlbumCategory(categoryId,categoryName,categoryDesc);
+					return ac;
+				}//mapRow
+				
+			};//Anonymous class
+}
+
+
+
+
+
+
+
+
+
