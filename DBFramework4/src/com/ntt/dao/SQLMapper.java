@@ -1,13 +1,13 @@
 package com.ntt.dao;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.ntt.dbfw.ResultMapper;
-import com.ntt.domain.Admin;
 import com.ntt.domain.AlbumCategory;
 import com.ntt.domain.AlbumDetails;
-import com.ntt.domain.Customer;
+import com.ntt.domain.Hire;
 import com.ntt.domain.User;
 
 public class SQLMapper {
@@ -18,13 +18,18 @@ public class SQLMapper {
 		"insert into USER values(?,?,?,?,?,?,?,?,?,?)";
 	public static final String FETCHALBUM=
 			"select * from ALBUMDETAILS";
+	public static final String FETCHALBUMID=
+			"select * from ALBUMDETAILS where ALBUMID=?";
 	public static final String FETCHAVAILALBUM=
 			"select * from ALBUMDETAILS where STATUS='Available'";
 	public static final String INSERTALBUM=
 			"insert into ALBUMDETAILS values(?,?,?,?,?,?)";
 	public static final String FETCHALBUMC=
 			"select * from ALBUMCATEGORY";
-	
+	public static final String FETCHHIRE=
+			"select * from HIRE";
+	public static final String INSERTHIRE=
+			"insert into HIRE values(?,?,?,?,?,?)";
 	public static final ResultMapper CUSTMAPPER=
 			new ResultMapper()
 		{
@@ -72,6 +77,22 @@ public class SQLMapper {
 				}//mapRow
 				
 			};//Anonymous class
+			public static final ResultMapper HIREMAPPER=
+					new ResultMapper()
+				{
+					public Object mapRow(ResultSet rs) throws SQLException {
+					int hireId=	rs.getInt(1);
+					int customerId=rs.getInt(2);
+					String albumId=rs.getString(3);
+					Date hireDate=rs.getDate(4);
+					Date returnDate=rs.getDate(5);
+				    String status=rs.getString(6);
+				    int totalHirePrice=rs.getInt(7);
+					Hire h=new Hire(hireId,customerId,albumId,hireDate,returnDate,status,totalHirePrice);
+						return h;
+					}//mapRow
+					
+				};//Anonymous class
 }
 
 

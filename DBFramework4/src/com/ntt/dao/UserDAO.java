@@ -12,8 +12,6 @@ import com.ntt.dbcon.DBConnectionException;
 import com.ntt.dbfw.DBFWException;
 import com.ntt.dbfw.DBHelper;
 import com.ntt.dbfw.ParamMapper;
-import com.ntt.domain.Admin;
-import com.ntt.domain.Customer;
 import com.ntt.domain.User;
 
 public class UserDAO {

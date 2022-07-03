@@ -13,7 +13,6 @@ import com.ntt.dbcon.DBConnectionException;
 import com.ntt.dbfw.DBFWException;
 import com.ntt.dbfw.DBHelper;
 import com.ntt.dbfw.ParamMapper;
-import com.ntt.domain.Admin;
 import com.ntt.domain.AlbumDetails;
 
 public class AlbumDetailsDAO {
@@ -82,35 +81,35 @@ static Logger log=Logger.getLogger(AlbumDetailsDAO.class);
 		
 	}
 	
-//	public static List getAlbum(final int aid,final String password)
-//	{
-//		ConnectionHolder ch=null;
-//		Connection con=null;
-//		List admin=null;
-//		
-//		try {
-//				ch=ConnectionHolder.getInstance();
-//				con=ch.getConnection();
-//			final ParamMapper ADMINPMAPPER=new ParamMapper()
-//			{
-//
-//				public void mapParam(PreparedStatement preStmt) throws SQLException {
-//				preStmt.setInt(1,aid);
-//				preStmt.setString(2,password);						
-//				}
-//				
-//			};//ananymous class
-//			
-//		album=DBHelper.executeSelect
-//		(con,SQLMapper.FETCHALBUM,SQLMapper.ALBUMMAPPER, ADMINPMAPPER );		
-//	
-//		} catch (DBConnectionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return admin;
-//		
-//	}//getcountry
+	public static List getAlbum(final int aid)
+	{
+		ConnectionHolder ch=null;
+		Connection con=null;
+		List album=null;
+		
+		try {
+				ch=ConnectionHolder.getInstance();
+				con=ch.getConnection();
+			final ParamMapper ALBUMPMAPPER=new ParamMapper()
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+				preStmt.setInt(1,aid);
+					
+				}
+				
+			};//ananymous class
+			
+		album=DBHelper.executeSelect
+		(con,SQLMapper.FETCHALBUMID,SQLMapper.ALBUMMAPPER, ALBUMPMAPPER );		
+	
+		} catch (DBConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return album;
+		
+	}//getcountry
 	
 	//insert
 	public static int insertAlbum(final AlbumDetails a)

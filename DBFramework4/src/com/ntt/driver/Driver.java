@@ -6,10 +6,8 @@ import javax.net.ssl.SSLException;
 
 import com.ntt.dbcon.DBConnectionException;
 import com.ntt.dbfw.DBFWException;
-import com.ntt.domain.Admin;
 import com.ntt.domain.AlbumCategory;
 import com.ntt.domain.AlbumDetails;
-import com.ntt.domain.Customer;
 import com.ntt.domain.User;
 import com.ntt.dao.*;
 public class Driver {
@@ -110,13 +108,16 @@ public static void actions() throws DBConnectionException{
 }
 public static void custActions() throws DBConnectionException{
 	List clist=null;
+	List clist2=null;
 	int ch=0;
 	int s=0;
+	int id=0;
 	int custStatus=0;
 	Scanner sc=new Scanner(System.in);
 	do {
 		System.out.println("--MENU--");
 		System.out.println("1.Search Album ");
+		
 		System.out.println("Enter ur ch");
 		ch=sc.nextInt();
 		switch(ch) {
@@ -167,6 +168,7 @@ public static void custActions() throws DBConnectionException{
 					e.printStackTrace();
 				}
 			}
+	           
 		
 		}
 		System.out.println("Do you wish to continue(press any number not zero)");
