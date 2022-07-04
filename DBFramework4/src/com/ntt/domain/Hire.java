@@ -1,25 +1,24 @@
 package com.ntt.domain;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 public class Hire {
 	private int hireId;
 	private int customerId;
-	private String albumId;
-	private Date hireDate;
-	private Date returnDate;
+	private int albumId;
+	private String hireDate;
+	private String returnDate;
 	private String status;
 	private int totalHirePrice;
 	
-	public Hire(int hireId, int customerId, String albumId, Date hireDate, Date returnDate, String status,
+	public Hire(int hireId,int customerId, int aid, String hireDate, String returnDate, String status,
 			int totalHirePrice) {
 		super();
-		this.hireId = hireId;
+		this.hireId=hireId;
 		this.customerId = customerId;
-		this.albumId = albumId;
+		this.albumId = aid;
 		this.hireDate = hireDate;
 		this.returnDate = returnDate;
 		this.status = status;
 		this.totalHirePrice = totalHirePrice;
+
 	}
 	public int getHireId() {
 		return hireId;
@@ -33,22 +32,22 @@ public class Hire {
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public String getAlbumId() {
+	public int getAlbumId() {
 		return albumId;
 	}
-	public void setAlbumId(String albumId) {
+	public void setAlbumId(int albumId) {
 		this.albumId = albumId;
 	}
-	public Date getHireDate() {
+	public String getHireDate() {
 		return hireDate;
 	}
-	public void setHireDate(Date hireDate) {
+	public void setHireDate(String hireDate) {
 		this.hireDate = hireDate;
 	}
-	public Date getReturnDate() {
+	public String getReturnDate() {
 		return returnDate;
 	}
-	public void setReturnDate(Date returnDate) {
+	public void setReturnDate(String returnDate) {
 		this.returnDate = returnDate;
 	}
 	
@@ -66,8 +65,8 @@ public class Hire {
 	}
 	@Override
 	public String toString() {
-		return "Hire [hireId=" + hireId + ", customerId=" + customerId + ", albumId=" + albumId + ", hireDate="
+		return  ("hireId=" + hireId + ", customerId=" + customerId + ", albumId=" + albumId + ", hireDate="
 				+ hireDate + ", returnDate=" + returnDate + " status=" + status
-				+ ", totalHirePrice=" + totalHirePrice + "]";
+				+ ", totalHirePrice=" + totalHirePrice);
 	}
 }

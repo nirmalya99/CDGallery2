@@ -1,13 +1,19 @@
 package com.ntt.driver;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Date;
+import java.time.LocalDate;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;  
 import java.util.Scanner;
 import javax.net.ssl.SSLException;
-
+import java.util.ArrayList;
 import com.ntt.dbcon.DBConnectionException;
 import com.ntt.dbfw.DBFWException;
 import com.ntt.domain.AlbumCategory;
 import com.ntt.domain.AlbumDetails;
+import com.ntt.domain.Hire;
 import com.ntt.domain.User;
 import com.ntt.dao.*;
 public class Driver {
@@ -22,6 +28,7 @@ public static void actions() throws DBConnectionException{
 		System.out.println("1.Add Album");
 		System.out.println("2.View All Albums");
 		System.out.println("3.View available Albums");
+		System.out.println("4.View Rental Table");
 		System.out.println("Enter ur ch");
 		ch=sc.nextInt();
 		switch(ch) {
@@ -96,6 +103,28 @@ public static void actions() throws DBConnectionException{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		case 4:
+			try {
+				alist=HireDAO.getHireDetails();
+				System.out.println("Details of Album are");
+				System.out.println("****************");
+				for(Iterator it=alist.iterator();it.hasNext();)
+				{
+					Hire h2=(Hire) it.next();
+					System.out.println(h2);
+					System.out.println("----------------");
+//				}
+				
+			}}
+			catch (DBFWException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e);
+				e.printStackTrace();
+			} catch (HireDAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
 		}
 		System.out.println("Do you wish to continue(press any number not zero)");
 		adminStatus=sc.nextInt();
@@ -106,7 +135,8 @@ public static void actions() throws DBConnectionException{
 		
 	}while(!(adminStatus==0));
 }
-public static void custActions() throws DBConnectionException{
+public static void custActions(int cid) throws DBConnectionException{
+	int cId=cid;
 	List clist=null;
 	List clist2=null;
 	int ch=0;
@@ -117,9 +147,12 @@ public static void custActions() throws DBConnectionException{
 	do {
 		System.out.println("--MENU--");
 		System.out.println("1.Search Album ");
+		System.out.println("2.Book Album");
+		System.out.println("3.View Booked album");
 		
 		System.out.println("Enter ur ch");
 		ch=sc.nextInt();
+		int result;
 		switch(ch) {
 		case 1:
 			System.out.println("To search Album by category press 1");
@@ -167,9 +200,102 @@ public static void custActions() throws DBConnectionException{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			} 
+		case 2:
+			try {
+				clist=AlbumDetailsDAO.getAlbum();
+				System.out.println("Details of Album are here ");
+				System.out.println("****************");
+				for(Iterator it=clist.iterator();it.hasNext();)
+				{
+					AlbumDetails a2=(AlbumDetails) it.next();
+					System.out.println(a2);
+					System.out.println("----------------");
+//				}
+				
+			}}
+			catch (DBFWException e) {
+				// TODO Auto-generated catch block
+				System.out.println(e);
+				e.printStackTrace();
+			} catch (AlbumDetailsDAOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-	           
-		
+			System.out.println("Enter AlbumId to book particular Album");
+	           id=sc.nextInt();
+	           sc.nextLine();
+	           clist2=AlbumDetailsDAO.getAlbum(id);
+	           String s1=clist2.toString();   
+	           String []arr=s1.split(",");
+	           ArrayList<String> b=new ArrayList<String>();
+	           for(String s2:arr){
+	               String []a=s2.split("=");
+	               b.add(a[1]);
+	           }
+	           int aid=Integer.valueOf(b.get(0));
+	           int cd=Integer.valueOf(b.get(4));
+	           int hp=Integer.valueOf(b.get(3));
+	           String status=b.get(5).substring(0,b.get(5).length()-1);
+	           if(status.equals("Unavailable")) {
+	        	   System.out.println("No CD left to book");
+	        	   break;
+	           }
+	           cd=cd-1;
+	           if(cd==0) {
+	        	   status="Unavailable";
+	           }
+	           System.out.println("Enter Hire Id");
+	           int hid=sc.nextInt();
+	           sc.nextLine();
+	           DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	           Date date = new Date();
+	           String sHireDate=dateFormat.format(date);
+	           System.out.println(sHireDate);
+	           System.out.println("Enter at what date will you return the book in (dd/MM/yyyy) ?");
+	           String sReturnDate=sc.nextLine();
+	           int d1=0,d2=0;
+	   	    if (sHireDate.charAt(0)=='0')
+	   	    {
+	   	         d1=Character.getNumericValue(sHireDate.charAt(1));
+	   	        
+	   	    }
+	   	    else{
+	   	         d1=Integer.valueOf(sHireDate.substring(0,2));
+	   	    }
+	   	  if (sReturnDate.charAt(0)=='0')
+	   	    {
+	   	         d2=Character.getNumericValue(sReturnDate.charAt(1));
+	   	        
+	   	    }
+	   	    else{
+	   	         d2=Integer.valueOf(sReturnDate.substring(0,2));
+	   	    }
+	   	  int netD=d2-d1;
+	   	  int totalHirePrice=netD*hp;
+	  	Hire h=new Hire(hid,cId,aid,sHireDate,sReturnDate,status,totalHirePrice);
+		result=HireDAO.insertHire(h);
+		if(result!=0)
+		{
+			System.out.println("Rental details inserted successfully");
+		}
+		else
+		{
+			System.out.println("Failed to insert");
+		}  
+		case 3:
+			clist=HireDAO.getHireDetails(cid);
+			System.out.println("Details of Album are");
+			System.out.println("****************");
+			for(Iterator it=clist.iterator();it.hasNext();)
+			{
+				Hire a2=(Hire) it.next();
+				System.out.println(a2);
+				System.out.println("----------------");
+//				}
+			
+}
+			break;
 		}
 		System.out.println("Do you wish to continue(press any number not zero)");
 		custStatus=sc.nextInt();
@@ -177,6 +303,9 @@ public static void custActions() throws DBConnectionException{
 			System.out.println("You have successsfully logged out");
 			System.out.println("Returning to Main Menu");
 		}
+	
+			
+			
 	}
 	while(!(custStatus==0));
 	
@@ -258,7 +387,7 @@ static void userRegistration() {
 				if(!(list1.isEmpty()))
 				{
 				System.out.println("Successfully Logged in ");
-				       custActions();
+				       custActions(cid);
 				}
 				else
 				{

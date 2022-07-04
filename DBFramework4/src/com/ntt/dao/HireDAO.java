@@ -1,6 +1,4 @@
 package com.ntt.dao;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -50,6 +48,36 @@ static Logger log=Logger.getLogger(HireDAO.class);
 		return hire;
 		
 	}//getcountry
+	public static List getHireDetails(final int cid)
+	{
+		ConnectionHolder ch=null;
+		Connection con=null;
+		List album=null;
+		
+		try {
+				ch=ConnectionHolder.getInstance();
+				con=ch.getConnection();
+			final ParamMapper HIREPMAPPER=new ParamMapper()
+			{
+
+				public void mapParam(PreparedStatement preStmt) throws SQLException {
+				preStmt.setInt(1,cid);
+					
+				}
+				
+			};//ananymous class
+			
+		album=DBHelper.executeSelect
+		(con,SQLMapper.FETCHHIREID,SQLMapper.HIREMAPPER, HIREPMAPPER );		
+	
+		} catch (DBConnectionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return album;
+		
+	}//getcountry
+	
 	public static int insertHire(final Hire h)
 	{
 		ConnectionHolder ch=null;
@@ -68,10 +96,11 @@ static Logger log=Logger.getLogger(HireDAO.class);
 						throws SQLException {
 					preStmt.setInt(1, h.getHireId());
 					preStmt.setInt(2, h.getCustomerId());
-					preStmt.setString(3, h.getAlbumId());
-					preStmt.setDate(4, (java.sql.Date) h.getHireDate());
-					preStmt.setDate(5, (java.sql.Date) h.getReturnDate());
+					preStmt.setInt(3, h.getAlbumId());
+					preStmt.setString(4,  h.getHireDate());
+					preStmt.setString(5, h.getReturnDate());
 					preStmt.setString(6, h.getStatus());
+					preStmt.setInt(7, h.getTotalHirePrice());
 				}
 				
 			};
